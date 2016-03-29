@@ -1,0 +1,43 @@
+ECSMobileChat/bin/
+ECSMobileChat/gen/
+ECSMobileChat/build/
+ECSxmppSDK/bin/
+ECSxmppSDK/gen/
+ECSxmppSDK/build/
+SmackAndroid/bin/
+SmackAndroid/gen/
+SmackAndroid/build/
+ECSMobileChatBlueLogo/bin/
+ECSMobileChatBlueLogo/gen/
+ECSMobileChatEMMALogo/bin/
+ECSMobileChatEMMALogo/gen/
+ECSMobileChatEMMALogo/build/
+SdkUnitTest/bin/
+SdkUnitTest/gen/
+.gradle/
+build/
+
+#misc files
+q
+tatus
+
+#local settings
+local.properties
+*.prefs
+*.properties
+
+# built application files
+*.apk
+*.ap_
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# Intellij project files
+*.iml
+*.ipr
+*.iws
+.idea/
