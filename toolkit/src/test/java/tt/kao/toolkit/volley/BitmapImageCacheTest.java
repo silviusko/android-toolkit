@@ -2,6 +2,8 @@ package tt.kao.toolkit.volley;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.text.TextUtils;
 
 import com.android.volley.Cache;
 
@@ -26,21 +28,15 @@ import static org.junit.Assert.assertNull;
 @Config(constants = BuildConfig.class, sdk = 21)
 public class BitmapImageCacheTest {
     private MockBitmapImageCache mCache;
-    private MockSmallBitmapImageCache mSmallCache;
-    private MockDifferentBitmapImageCache mDiffCache;
 
     @Before
     public void setUp() throws Exception {
         mCache = new MockBitmapImageCache(RuntimeEnvironment.application);
-        mSmallCache = new MockSmallBitmapImageCache(RuntimeEnvironment.application);
-        mDiffCache = new MockDifferentBitmapImageCache(RuntimeEnvironment.application);
     }
 
     @After
     public void tearDown() throws Exception {
         mCache.clear();
-        mSmallCache.clear();
-        mDiffCache.clear();
     }
 
     @Test(expected = NullPointerException.class)
@@ -57,45 +53,10 @@ public class BitmapImageCacheTest {
     }
 
     @Test
-    public void getBitmap_overMemoryCapability() {
-        Bitmap bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ALPHA_8);
-        mDiffCache.putBitmap("key 1", bitmap);
-        mDiffCache.putBitmap("key 2", bitmap);
-        mDiffCache.putBitmap("key 3", bitmap);
-
-        // load from memory cache
-        assertNotNull(mDiffCache.getBitmap("key 2"));
-        assertNotNull(mDiffCache.getBitmap("key 3"));
-
-        // load from disk cache, and put it into memory cache
-        assertNotNull(mDiffCache.getBitmap("key 1"));
-    }
-
-    @Test
-    public void getBitmap_overDiskCapability() {
-        Bitmap bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ALPHA_8);
-        mDiffCache.putBitmap("key 1", bitmap);
-        mDiffCache.putBitmap("key 2", bitmap);
-        mDiffCache.putBitmap("key 3", bitmap);
-        mDiffCache.putBitmap("key 4", bitmap);
-
-        // load from memory cache
-        assertNotNull(mDiffCache.getBitmap("key 3"));
-        assertNotNull(mDiffCache.getBitmap("key 4"));
-
-        // load from disk cache, and put it into memory cache
-        assertNotNull(mDiffCache.getBitmap("key 2"));
-
-        assertNull(mDiffCache.getBitmap("key 1"));
-    }
-
-    @Test
     public void putBitmap_nullValue() {
         mCache.putBitmap(null, null);
 
-        assertEquals(0, mCache.getMemoryCacheSize());
-
-        assertNull(mCache.getEntryFromDisk("key 1"));
+        assertEquals(0, mCache.getCacheSize());
     }
 
     @Test
@@ -103,9 +64,7 @@ public class BitmapImageCacheTest {
         Bitmap bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ALPHA_8);
         mCache.putBitmap("key 1", bitmap);
 
-        assertEquals(100, mCache.getMemoryCacheSize());
-
-        assertNotNull(mCache.getEntryFromDisk("key 1"));
+        assertNotNull(mCache.getBitmap("key 1"));
     }
 
     @Test
@@ -114,60 +73,32 @@ public class BitmapImageCacheTest {
         mCache.putBitmap("key 1", bitmap);
         mCache.putBitmap("key 1", bitmap);
 
-        assertEquals(100, mCache.getMemoryCacheSize());
-
         assertNotNull(mCache.getEntryFromMem("key 1"));
-        assertNotNull(mCache.getEntryFromDisk("key 1"));
     }
 
     @Test
-    public void putBitmap_smallCache() {
+    public void putBitmap_overCache() {
+        int cacheSize = mCache.getMaxCacheSize();
+
+        String firstKey = "";
+        String key = "";
         Bitmap bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ALPHA_8);
-        mSmallCache.putBitmap("key 1", bitmap);
-        mSmallCache.putBitmap("key 2", bitmap);
+        for (int i = 0, size = 0; size < cacheSize; i++) {
+            key = "key " + i;
+            if (TextUtils.isEmpty(firstKey)) {
+                firstKey = key;
+            }
+            mCache.putBitmap(key, bitmap);
 
-        assertEquals(100, mSmallCache.getMemoryCacheSize());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                size += bitmap.getAllocationByteCount();
+            } else {
+                size += bitmap.getByteCount();
+            }
+        }
 
-        assertNull(mSmallCache.getEntryFromMem("key 1"));
-        assertNotNull(mSmallCache.getEntryFromMem("key 2"));
-
-        assertNull(mSmallCache.getEntryFromDisk("key 1"));
-        assertNotNull(mSmallCache.getEntryFromDisk("key 2"));
-    }
-
-    @Test
-    public void putBitmap_diffCache() {
-        // The size is 100 in memory cache and the prune condition is the size equals and smalls in memory cache
-        // The size is 50 in disk cache and the prune condition is the size smalls in disk cache
-        Bitmap bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ALPHA_8);
-
-        mDiffCache.putBitmap("key 1", bitmap);
-        assertNotNull(mDiffCache.getEntryFromMem("key 1"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 1"));
-
-        mDiffCache.putBitmap("key 2", bitmap);
-        assertNotNull(mDiffCache.getEntryFromMem("key 1"));
-        assertNotNull(mDiffCache.getEntryFromMem("key 2"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 1"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 2"));
-
-        mDiffCache.putBitmap("key 3", bitmap);
-        assertNull(mDiffCache.getEntryFromMem("key 1"));
-        assertNotNull(mDiffCache.getEntryFromMem("key 2"));
-        assertNotNull(mDiffCache.getEntryFromMem("key 3"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 1"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 2"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 3"));
-
-        mDiffCache.putBitmap("key 4", bitmap);
-        assertNull(mDiffCache.getEntryFromMem("key 1"));
-        assertNull(mDiffCache.getEntryFromMem("key 2"));
-        assertNotNull(mDiffCache.getEntryFromMem("key 3"));
-        assertNotNull(mDiffCache.getEntryFromMem("key 4"));
-        assertNull(mDiffCache.getEntryFromDisk("key 1"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 2"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 3"));
-        assertNotNull(mDiffCache.getEntryFromDisk("key 4"));
+        assertNull(mCache.getEntryFromMem(firstKey));
+        assertNotNull(mCache.getEntryFromMem(key));
     }
 
     @Test
@@ -186,54 +117,16 @@ public class BitmapImageCacheTest {
             super(context);
         }
 
-        public int getMemoryCacheSize() {
-            return mMemCache.size();
+        public int getMaxCacheSize() {
+            return bitmapLruCache.maxSize();
+        }
+
+        public int getCacheSize() {
+            return bitmapLruCache.size();
         }
 
         public Bitmap getEntryFromMem(String key) {
-            return mMemCache.get(key);
-        }
-
-        public Cache.Entry getEntryFromDisk(String key) {
-            return mDiskLruCache.get(key);
-        }
-    }
-
-    private static class MockSmallBitmapImageCache extends BitmapImageCache {
-
-        public MockSmallBitmapImageCache(Context context) {
-            super(context, "small", 100, 100);
-        }
-
-        public int getMemoryCacheSize() {
-            return mMemCache.size();
-        }
-
-        public Bitmap getEntryFromMem(String key) {
-            return mMemCache.get(key);
-        }
-
-        public Cache.Entry getEntryFromDisk(String key) {
-            return mDiskLruCache.get(key);
-        }
-    }
-
-    private static class MockDifferentBitmapImageCache extends BitmapImageCache {
-
-        public MockDifferentBitmapImageCache(Context context) {
-            super(context, "different", 200, 200);
-        }
-
-        public int getMemoryCacheSize() {
-            return mMemCache.size();
-        }
-
-        public Bitmap getEntryFromMem(String key) {
-            return mMemCache.get(key);
-        }
-
-        public Cache.Entry getEntryFromDisk(String key) {
-            return mDiskLruCache.get(key);
+            return bitmapLruCache.get(key);
         }
     }
 }

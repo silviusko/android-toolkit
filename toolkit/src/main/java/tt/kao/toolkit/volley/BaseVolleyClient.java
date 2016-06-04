@@ -1,6 +1,7 @@
 package tt.kao.toolkit.volley;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -15,7 +16,7 @@ public class BaseVolleyClient {
     private RequestQueue mRequestQueue;
 
     protected BaseVolleyClient(Context context) {
-        BitmapImageCache imageCache = new BitmapImageCache(context);
+        BitmapImageCache imageCache = createBitmapImageCache(context);
 
         mRequestQueue = Volley.newRequestQueue(context);
         mImageLoader = new ImageLoader(mRequestQueue, imageCache);
@@ -31,5 +32,10 @@ public class BaseVolleyClient {
 
     public ImageLoader getImageLoader() {
         return mImageLoader;
+    }
+
+    @NonNull
+    protected BitmapImageCache createBitmapImageCache(Context context) {
+        return new BitmapImageCache(context);
     }
 }
