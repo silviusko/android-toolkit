@@ -5,7 +5,7 @@ import android.text.TextUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricGradleTestRunner;
+import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import tt.kao.toolkit.BuildConfig;
@@ -13,7 +13,7 @@ import tt.kao.toolkit.BuildConfig;
 /**
  * @author luke_kao
  */
-@RunWith(RobolectricGradleTestRunner.class)
+@RunWith(RobolectricTestRunner.class)
 @Config(constants = BuildConfig.class, sdk = 21)
 public class HashUtilsTest {
     public static final String TEST_STRING = "abcd一二三四あか。";
