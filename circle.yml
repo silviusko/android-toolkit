@@ -3,18 +3,21 @@
 #
 
 machine:
-    environment:
-        ANDROID_HOME: /usr/local/android-sdk-linux
+  java:
+    version: oraclejdk8
+
+  environment:
+    ANDROID_HOME: /usr/local/android-sdk-linux
 
 dependencies:
-    override:
-        - echo y | android update sdk --no-ui --all --filter platform-tools
-        - echo y | android update sdk --no-ui --all --filter tools
-        - echo y | android update sdk --no-ui --all --filter build-tools-25.0.2
-        - echo y | android update sdk --no-ui --all --filter android-25
-        - echo y | android update sdk --no-ui --all --filter extra-android-support
-        - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
-        - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
+  pre:
+    - echo y | android update sdk --no-ui --all --filter platform-tools
+    - echo y | android update sdk --no-ui --all --filter tools
+    - echo y | android update sdk --no-ui --all --filter build-tools-25.0.2
+    - echo y | android update sdk --no-ui --all --filter android-25
+    - echo y | android update sdk --no-ui --all --filter extra-android-support
+    - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
+    - ANDROID_HOME=/usr/local/android-sdk-linux ./gradlew dependencies
 
 test:
   override:
