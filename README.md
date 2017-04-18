@@ -1,7 +1,7 @@
 Android Toolkit
 ===============
 
-[![API](https://img.shields.io/badge/API-15%2B-green.svg)](https://github.com/silviusko/android-toolkit)
+[![API](https://img.shields.io/badge/API-14%2B-green.svg)](https://github.com/silviusko/android-toolkit)
 [![Circle CI](https://circleci.com/gh/silviusko/android-toolkit/tree/master.svg?style=shield)](https://circleci.com/gh/silviusko/android-toolkit/tree/master)
 
 Android Toolkit provides common utilities to build a application easily.

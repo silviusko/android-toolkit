@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TaggingLayout">
+        <attr name="childHorizontalSpacing" format="dimension"/>
+        <attr name="childVerticalSpacing" format="dimension"/>
+        <attr name="gravity">
+            <!-- https://developer.android.com/reference/android/R.attr.html#gravity -->
+            <flag name="bottom" value="0x50"/>
+            <flag name="center" value="0x11"/>
+            <flag name="center_horizontal" value="0x1"/>
+            <flag name="center_vertical" value="0x10"/>
+            <flag name="left" value="0x3"/>
+            <flag name="right" value="0x5"/>
+            <flag name="top" value="0x30"/>
+        </attr>
+        <attr name="maxLine" format="integer"/>
+    </declare-styleable>
+</resources>
