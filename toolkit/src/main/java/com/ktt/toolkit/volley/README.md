@@ -1,5 +1,5 @@
-Volley Base Library
-===================
+BaseVolleyClient
+================
 
 Implement a subclass
 --------------------

@@ -1,4 +1,4 @@
-package com.ktt.toolkit.utils;
+package com.ktt.toolkit.secure;
 
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -24,7 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
  * @author luke_kao
  *
  */
-public class HashUtils {
+public class CryptoUtils {
     private static final String DEFAULT_PASSWORD = "GBAQUFXV4uJJxxkyoIkD";
     private static final String SEPARATOR = "]";
     private static final int ITERATION_COUNT = 1000;
