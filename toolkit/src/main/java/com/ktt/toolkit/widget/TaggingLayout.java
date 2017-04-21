@@ -69,7 +69,6 @@ public class TaggingLayout extends ViewGroup {
             View child = getChildAt(i);
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
 
-            // move cursor with new horizontal spacing for new child
             int currentHorizontalSpacing = currentPos > 0 ? mChildHorizontalSpacing : 0;
 
             // move cursor with new horizontal spacing for new child
