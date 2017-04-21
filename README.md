@@ -30,14 +30,18 @@ How to use
   $ cp ./toolkit/build/outputs/aar/toolkit-release.aar \
   ./yourproject/app/libs
 ```
-3. Declare repository for importing aar files
+3. Declare a repository as a flatDir for importing aar files
 ```
-  ???????
+  repositories {
+    flatDir {
+        dirs 'libs'
+    }
+  }
 ```
-4. Import aar files
+4. Declare aar dependencies
 ```
   dependencies {
-    compile 'com.ktt.toolkit:android-toolkit@aar'
+    compile 'com.ktt.toolkit:toolkit-release@aar'
   }
 ```
 
