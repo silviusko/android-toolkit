@@ -10,13 +10,13 @@ Features
 --------
 
 + **BaseSQLiteOpenHelper :** Provide all sql actions with a transaction mechanism.
-+ **[PermissionManager](./toolkit/src/main/java/com/ktt/toolkit/permission/README.md)**
++ **[PermissionManager](./doc/permission/README.md)**
 + **BasePreferences :** Use simple annotations to access preferences.
 + **CryptoUtil :** Provide encrypt, decrypt and md5 methods.
-+ **[BaseVollyClient](./toolkit/src/main/java/com/ktt/toolkit/volley/README.md)**
-+ **[WaterMark](./toolkit/src/main/java/com/ktt/toolkit/watermark/README.md)**
++ **[BaseVollyClient](./doc/volley/README.md)**
++ **[WaterMark](./doc/watermark/README.md)**
 + **Widgets**
-  - **TaggingLayout :** A FlowLayout with gravity for child views.
+  - **[TaggingLayout](./doc/widget/TaggingLayout/README.md)**
 + **Other Utilities**
 
 How to use
