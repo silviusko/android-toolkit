@@ -6,10 +6,12 @@ TaggingLayout
 Snapshot
 --------
 + Gravity is center
-  ![Gravity Center](./gravity_center.png)
+
+![Gravity Center](./gravity_center.png)
 
 + Gravity is bottom and right
-  ![Gravity Bottom & Right](./gravity_bottom_right.png)
+
+![Gravity Bottom & Right](./gravity_bottom_right.png)
 
 Usage
 -----
