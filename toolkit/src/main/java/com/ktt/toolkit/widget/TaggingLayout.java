@@ -39,8 +39,8 @@ public class TaggingLayout extends ViewGroup {
         try {
             mChildHorizontalSpacing = a.getDimensionPixelSize(R.styleable.TaggingLayout_childHorizontalSpacing, 0);
             mChildVerticalSpacing = a.getDimensionPixelSize(R.styleable.TaggingLayout_childVerticalSpacing, 0);
-            mGravity = a.getInt(R.styleable.TaggingLayout_gravity, Gravity.CENTER_HORIZONTAL);
-            mMaxLine = a.getInt(R.styleable.TaggingLayout_maxLine, NONE_VALUE);
+            mGravity = a.getInt(R.styleable.TaggingLayout_android_gravity, Gravity.CENTER_HORIZONTAL);
+            mMaxLine = a.getInt(R.styleable.TaggingLayout_android_maxLines, NONE_VALUE);
         } finally {
             a.recycle();
         }

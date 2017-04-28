@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <attr name="DotsPageIndicatorStyle" format="reference"/>
+
+    <attr name="childHorizontalSpacing" format="dimension"/>
+    <attr name="childVerticalSpacing" format="dimension"/>
+    <attr name="spacing" format="dimension"/>
+    <attr name="dotColor" format="color"/>
+    <attr name="strokeWidth" format="dimension"/>
+    <attr name="strokeColor" format="dimension"/>
+    <attr name="snap" format="boolean"/>
+    <attr name="dotColorSelected" format="color"/>
+    <attr name="strokeColorSelected" format="color"/>
+
     <declare-styleable name="TaggingLayout">
-        <attr name="childHorizontalSpacing" format="dimension"/>
-        <attr name="childVerticalSpacing" format="dimension"/>
-        <attr name="gravity">
-            <!-- https://developer.android.com/reference/android/R.attr.html#gravity -->
-            <flag name="bottom" value="0x50"/>
-            <flag name="center" value="0x11"/>
-            <flag name="center_horizontal" value="0x1"/>
-            <flag name="center_vertical" value="0x10"/>
-            <flag name="left" value="0x3"/>
-            <flag name="right" value="0x5"/>
-            <flag name="top" value="0x30"/>
-        </attr>
-        <attr name="maxLine" format="integer"/>
+        <attr name="android:gravity"/>
+        <attr name="android:maxLines"/>
+        <attr name="childHorizontalSpacing"/>
+        <attr name="childVerticalSpacing"/>
+    </declare-styleable>
+
+    <declare-styleable name="DotsPageIndicator">
+        <attr name="android:orientation"/>
+        <attr name="android:radius"/>
+        <attr name="spacing"/>
+        <attr name="snap"/>
+        <attr name="dotColor"/>
+        <attr name="dotColorSelected"/>
+        <attr name="strokeWidth"/>
+        <attr name="strokeColor"/>
+        <attr name="strokeColorSelected"/>
     </declare-styleable>
 </resources>

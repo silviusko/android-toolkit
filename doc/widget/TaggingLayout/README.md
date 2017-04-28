@@ -24,8 +24,8 @@ Usage
     android:padding="10dp"
     app:childHorizontalSpacing="10dp"
     app:childVerticalSpacing="10dp"
-    app:gravity="center"
-    app:maxLine="2">
+    android:gravity="center"
+    android:maxLine="2">
 
     <!-- your custom child views -->
     <TextView text="a" />
@@ -38,8 +38,8 @@ Usage
 
 Properties
 ----------
-+ **gravity** : specify the gravity of child views
++ **android:gravity** : specify the gravity of child views
   - value: left, right, top, bottom, center, center_horizontal, center_vertical
-+ **maxLine** : specify the max lines of child views
++ **android:maxLine** : specify the max lines of child views
 + **childVerticalSpacing**
 + **childHorizontalSpacing**

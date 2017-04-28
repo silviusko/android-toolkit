@@ -16,6 +16,7 @@ Features
 + **[BaseVollyClient](./doc/volley/README.md)**
 + **[WaterMark](./doc/watermark/README.md)**
 + **Widgets**
+  - **DotsPageIndicator :** A page indicator with dots and strokes
   - **[TaggingLayout](./doc/widget/TaggingLayout/README.md)**
 + **Other Utilities**
 
