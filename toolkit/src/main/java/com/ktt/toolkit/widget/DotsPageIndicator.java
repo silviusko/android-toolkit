@@ -31,7 +31,7 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
 
     private int mOrientation;
     private float mRadius;
-    private float mStokeWidth;
+    private float mStrokeWidth;
     private float mSpacing;
     private boolean mSnap;
     private int mCurrentPosition;
@@ -54,16 +54,18 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
 
         mOrientation = a.getInt(R.styleable.DotsPageIndicator_android_orientation, HORIZONTAL);
         mRadius = a.getDimension(R.styleable.DotsPageIndicator_android_radius, 0);
-        mStokeWidth = a.getDimension(R.styleable.DotsPageIndicator_strokeWidth, 0);
+        mStrokeWidth = a.getDimension(R.styleable.DotsPageIndicator_strokeWidth, 0);
         mSpacing = a.getDimension(R.styleable.DotsPageIndicator_spacing, 0);
         mSnap = a.getBoolean(R.styleable.DotsPageIndicator_snap, true);
 
         mPaintDot.setColor(a.getColor(R.styleable.DotsPageIndicator_dotColor, ContextCompat.getColor(context, android.R.color.white)));
         mPaintDotSelected.setColor(a.getColor(R.styleable.DotsPageIndicator_dotColorSelected, ContextCompat.getColor(context, android.R.color.black)));
         mPaintStroke.setColor(a.getColor(R.styleable.DotsPageIndicator_strokeColor, ContextCompat.getColor(context, android.R.color.black)));
-        mPaintStroke.setStrokeWidth(mStokeWidth);
+        mPaintStroke.setStrokeWidth(mStrokeWidth);
+        mPaintStroke.setStyle(Paint.Style.STROKE);
         mPaintStrokeSelected.setColor(a.getColor(R.styleable.DotsPageIndicator_strokeColorSelected, ContextCompat.getColor(context, android.R.color.black)));
-        mPaintStrokeSelected.setStrokeWidth(mStokeWidth);
+        mPaintStrokeSelected.setStrokeWidth(mStrokeWidth);
+        mPaintStrokeSelected.setStyle(Paint.Style.STROKE);
 
         a.recycle();
     }
@@ -87,8 +89,9 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
 
         final int count = mViewPager.getAdapter().getCount();
         final int spacingCount = count > 0 ? count - 1 : 0;
+        final float circleSize = 2 * mRadius + mStrokeWidth;
 
-        int result = (int) Math.ceil(2 * mRadius * count + mSpacing * spacingCount);
+        int result = (int) Math.ceil(circleSize * count + mSpacing * spacingCount);
 
         // with padding
         result += (mOrientation == HORIZONTAL) ?
@@ -110,7 +113,7 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
             return specSize;
         }
 
-        int result = (int) Math.ceil(2 * mRadius);
+        int result = (int) Math.ceil(2 * mRadius + mStrokeWidth);
 
         // with padding
         result += (mOrientation == HORIZONTAL) ?
@@ -145,57 +148,55 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
         } else {
             longSize = getHeight();
             longPaddingStart = getPaddingTop();
-            longPaddingEnd = getPaddingEnd();
+            longPaddingEnd = getPaddingBottom();
             shortPaddingStart = getPaddingLeft();
         }
 
         final float remainingLongSize = longSize -
             longPaddingStart - longPaddingEnd - // padding
-            count * 2 * mRadius - // dots size
+            count * (2 * mRadius + mStrokeWidth) - // dots size
             (count - 1) * mSpacing; // spacings size
 
-        final float shortOffset = shortPaddingStart + mRadius;
-        final float longOffset = longPaddingStart + mRadius + remainingLongSize / 2;
+        final float shortOffset = shortPaddingStart + mRadius + mStrokeWidth / 2;
+        final float longOffset = longPaddingStart + mRadius + mStrokeWidth / 2 + remainingLongSize / 2;
 
         drawDots(canvas, count, shortOffset, longOffset);
         drawDotSelected(canvas, shortOffset, longOffset);
     }
 
-    private float drawDots(Canvas canvas, int count, float shortOffset, float longOffset) {
+    private void drawDots(Canvas canvas, int count, float shortOffset, float longOffset) {
         float circleX;
         float circleY;
 
-        final float innerRadius = mRadius - mStokeWidth;
-
         for (int i = 0; i < count; i++) {
             float currentRadiusOffset = i * 2 * mRadius;
+            float currentStrokeOffset = i * mStrokeWidth;
             float currentAllSpacing = i * mSpacing;
             if (mOrientation == HORIZONTAL) {
-                circleX = longOffset + currentRadiusOffset + currentAllSpacing;
+                circleX = longOffset + currentRadiusOffset + currentStrokeOffset + currentAllSpacing;
                 circleY = shortOffset;
             } else {
                 circleX = shortOffset;
-                circleY = longOffset + currentRadiusOffset + currentAllSpacing;
+                circleY = longOffset + currentRadiusOffset + currentStrokeOffset + currentAllSpacing;
             }
 
-            if (mStokeWidth > 0) {
+            canvas.drawCircle(circleX, circleY, mRadius, mPaintDot);
+
+            if (mStrokeWidth > 0) {
                 canvas.drawCircle(circleX, circleY, mRadius, mPaintStroke);
             }
-
-            canvas.drawCircle(circleX, circleY, innerRadius, mPaintDot);
         }
-        return innerRadius;
     }
 
     private void drawDotSelected(Canvas canvas, float shortOffset, float longOffset) {
         float circleX;
         float circleY;
 
-        final float innerRadius = mRadius - mStokeWidth;
         final float startPosition = mSnap ? mSnapPosition : mCurrentPosition;
-        final float shiftOffset = startPosition * 2 * mRadius;
+        final float radiusOffset = startPosition * 2 * mRadius;
+        final float strokeOffset = startPosition * mStrokeWidth;
         final float spacingOffset = startPosition * mSpacing;
-        final float dotGap = 2 * mRadius + mSpacing;
+        final float dotGap = 2 * mRadius + mStrokeWidth + mSpacing;
 
         float dragOffset = 0;
         if (!mSnap) {
@@ -206,19 +207,18 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
         }
 
         if (mOrientation == HORIZONTAL) {
-            circleX = longOffset + shiftOffset + spacingOffset + dragOffset;
+            circleX = longOffset + radiusOffset + strokeOffset + spacingOffset + dragOffset;
             circleY = shortOffset;
         } else {
             circleX = shortOffset;
-            circleY = longOffset + shiftOffset + spacingOffset + dragOffset;
+            circleY = longOffset + radiusOffset + strokeOffset + spacingOffset + dragOffset;
         }
 
+        canvas.drawCircle(circleX, circleY, mRadius, mPaintDotSelected);
 
-        if (mStokeWidth > 0) {
+        if (mStrokeWidth > 0) {
             canvas.drawCircle(circleX, circleY, mRadius, mPaintStrokeSelected);
         }
-
-        canvas.drawCircle(circleX, circleY, innerRadius, mPaintDotSelected);
     }
 
     @Override
@@ -293,7 +293,7 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
             dest.writeInt(currentPosition);
         }
 
-        public static final Creator<SavedState> CREATOR = new Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
             @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
