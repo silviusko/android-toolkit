@@ -34,6 +34,8 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
     private float mStrokeWidth;
     private float mSpacing;
     private boolean mSnap;
+    private boolean mShowSingleDot;
+
     private int mCurrentPosition;
     private int mSnapPosition;
     private float mPositionOffset;
@@ -57,6 +59,7 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
         mStrokeWidth = a.getDimension(R.styleable.DotsPageIndicator_strokeWidth, 0);
         mSpacing = a.getDimension(R.styleable.DotsPageIndicator_spacing, 0);
         mSnap = a.getBoolean(R.styleable.DotsPageIndicator_snap, true);
+        mShowSingleDot = a.getBoolean(R.styleable.DotsPageIndicator_showSingleDot, true);
 
         mPaintDot.setColor(a.getColor(R.styleable.DotsPageIndicator_dotColor, ContextCompat.getColor(context, android.R.color.white)));
         mPaintDotSelected.setColor(a.getColor(R.styleable.DotsPageIndicator_dotColorSelected, ContextCompat.getColor(context, android.R.color.black)));
@@ -135,6 +138,7 @@ public class DotsPageIndicator extends View implements ViewPager.OnPageChangeLis
 
         final int count = mViewPager.getAdapter().getCount();
         if (count == 0) return;
+        if (!mShowSingleDot && count == 1) return;
 
         int longSize;
         int longPaddingStart;

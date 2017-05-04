@@ -29,5 +29,6 @@
         <attr name="strokeWidth"/>
         <attr name="strokeColor"/>
         <attr name="strokeColorSelected"/>
+        <attr name="showSingleDot" format="boolean"/>
     </declare-styleable>
 </resources>

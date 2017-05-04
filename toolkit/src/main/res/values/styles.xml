@@ -1,5 +1,4 @@
 <resources>
-
     <style name="DotsPageIndicatorStyle">
         <item name="android:orientation">horizontal</item>
         <item name="android:radius">5dp</item>
@@ -10,5 +9,6 @@
         <item name="strokeWidth">0dp</item>
         <item name="strokeColor">@android:color/transparent</item>
         <item name="strokeColorSelected">@android:color/transparent</item>
+        <item name="showSingleDot">true</item>
     </style>
 </resources>
