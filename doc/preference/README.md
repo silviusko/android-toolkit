@@ -2,6 +2,8 @@
 
 Use simple annotations to access preferences. 
 
+## How to implement and use
+
 1. implement your preferences class and extend from BasePreferences
     ```java
     public class Preferences extends BasePreferences {
@@ -27,11 +29,21 @@ Use simple annotations to access preferences.
     ```
 4. call loadAll() to load all preferences
 5. save a preference with two steps
- * assign the value into the field
- * call save(KEY) method to save the value from field into preference, the KEY is your definitions in step 2
-     ```
-     Preferences preferences = new Preferences(context)
-     preferences.uid = "USER_5678";
-     preferences.save(Preferences.KEY_UID);
-     ```
+    * assign the value into the field
+    * call save(KEY) method to save the value from field into preference, the KEY is your definitions in step 2
+         ```
+         Preferences preferences = new Preferences(context)
+         preferences.uid = "USER_5678";
+         preferences.save(Preferences.KEY_UID);
+         ```
 6. you can also save all by calling saveAll() method
+
+## Properties
+
+Supported types with default value in PreferenceProperty annotation:
+
+* String with **stringValue**
+* boolean with **boolValue**
+* int with **intValue**
+* long with **longValue**
+* float with **floatValue**
