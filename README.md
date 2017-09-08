@@ -11,7 +11,7 @@ Features
 
 + **BaseSQLiteOpenHelper :** Provide all sql actions with a transaction mechanism.
 + **[PermissionManager](./doc/permission/README.md)**
-+ **BasePreferences :** Use simple annotations to access preferences.
++ **[BasePreferences](./doc/preference/README.md)**
 + **CryptoUtil :** Provide encrypt, decrypt and md5 methods.
 + **[BaseVollyClient](./doc/volley/README.md)**
 + **[WaterMark](./doc/watermark/README.md)**
