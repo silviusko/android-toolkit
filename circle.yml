@@ -1,33 +1,30 @@
-#
-# Build configuration for Circle CI
-#
-
-machine:
-  java:
-    version: oraclejdk8
-
-  environment:
-    ANDROID_HOME: /usr/local/android-sdk-linux
-
-dependencies:
-  pre:
-    - echo y | android update sdk --no-ui --all --filter platform-tools
-    - echo y | android update sdk --no-ui --all --filter tools
-    - echo y | android update sdk --no-ui --all --filter build-tools-25.0.3
-    - echo y | android update sdk --no-ui --all --filter android-25
-    - echo y | android update sdk --no-ui --all --filter extra-android-support
-    - echo y | android update sdk --no-ui --all --filter extra-android-m2repository
-
-test:
-  override:
-    - ./gradlew clean :toolkit:build
-
-  post:
-    # copy results
-    - cp -r toolkit/build/outputs $CIRCLE_ARTIFACTS
-
-    # test results
-    - mkdir $CIRCLE_TEST_REPORTS/reports/
-    - cp -r toolkit/build/reports/tests $CIRCLE_TEST_REPORTS/reports/;
-    - mkdir $CIRCLE_TEST_REPORTS/results/
-    - find . -type f -regex ".*toolkit/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/results/ \;
+version: 2
+jobs:
+  build:
+    working_directory: ~/code
+    docker:
+      - image: circleci/android:api-25-alpha
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "toolkit/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "toolkit/build.gradle" }}
+      - run:
+          name: Build
+          command: ./gradlew clean :toolkit:build
+      - store_artifacts:
+          path: toolkit/build/outputs
+          destination: artifacts
+      - store_artifacts:
+          path: toolkit/build/reports
+          destination: reports
+      - store_test_results:
+          path: toolkit/build/test-results
